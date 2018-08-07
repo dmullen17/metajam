@@ -37,6 +37,9 @@ read_d1_files <- function(folder_path, fnc = "read_csv", ...) {
     if (grepl("[^_]+_metadata(?=\\.csv)", basename(x), perl = TRUE)) {
       readr::read_csv(x)
     } else if (tools::file_path_sans_ext(basename(x)) == filename) {
+      if (tools::file_ext(x) != "csv") {
+        warning(sprintf("Attempting to read in file: %s with '%s'. A different function can be specified to read in the file with the 'fnc' argument.", x, fnc))
+      }
       eval(parse(text = paste0(fnc, '("', x, '", ...)')))
     }
   }) 
